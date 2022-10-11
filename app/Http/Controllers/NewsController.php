@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use App\Http\Requests\StoreNewsRequest;
-use App\Http\Requests\UpdateNewsRequest;
+use App\Models\Category;
+use App\Models\Comment;
+use Illuminate\Http\Request;
+use Validator;
 
 class NewsController extends Controller
 {
@@ -13,9 +15,18 @@ class NewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $news = News::all(); 
+        $categories = Category::all();
+        return view('news.index', ['news' => $news, 'categories' => $categories]);
+    }
+
+    public function showAll(Request $request)
+    {
+        $news = News::all(); 
+        $categories = Category::all();
+        return view('news.index', ['news' => $news, 'categories' => $categories]);
     }
 
     /**
@@ -25,18 +36,42 @@ class NewsController extends Controller
      */
     public function create()
     {
-        //
+        $news = News::all();
+        $categories = Category::all();
+        return view('news.create', ['news' => $news, 'categories' => $categories]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreNewsRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreNewsRequest $request)
+    public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+
+        $news = new News;
+
+        if ($request->file('news_photo')) {
+            $photo = $request->file('news_photo');
+            $ext = $photo->getClientOriginalExtension();
+            $name = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
+            $file = $name . '-' . rand(100000, 999999) . '.' . $ext;
+            $photo->move(public_path() . '/images', $file);
+            $news->image_path = asset('/images') . '/' . $file;
+        }
+        
+        $news->category_id = $request->category_id;
+        $news->title = $request->title;
+        $news->content = $request->content;
+
+        $news->save();
+        return redirect()->route('news-index')->with('success', 'Mechanics information successfully added');
     }
 
     /**
@@ -58,19 +93,44 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
-        //
+        $categories = Category::all();
+        return view('news.edit', ['news' => $news, 'categories' => $categories]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateNewsRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateNewsRequest $request, News $news)
+    public function update(Request $request, News $news)
     {
-        //
+        if ($request->file('news_photo')) {
+            if ($news->image_path) {
+            $name = pathinfo($news->image_path, PATHINFO_FILENAME);
+            $ext = pathinfo($news->image_path, PATHINFO_EXTENSION);
+            $path = public_path('/images') . '/' . $name . '.' . $ext;
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+        
+            $photo = $request->file('news_photo');
+            $ext = $photo->getClientOriginalExtension();
+            $name = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
+            $file = $name . '-' . rand(100000, 999999) . '.' . $ext;
+            $photo->move(public_path() . '/images', $file);
+            $news->image_path = asset('/images') . '/' . $file;
+        }
+
+        $news->title = $request->newTitle;
+        $news->content = $request->newContent;
+        $news->category_id = $request->newCategory;
+        
+        $news->save();
+        return redirect()->route('news-index')->with('infoUpdate', 'Mechanics information have been successfully updated.');
     }
 
     /**
@@ -81,6 +141,17 @@ class NewsController extends Controller
      */
     public function destroy(News $news)
     {
-        //
+        if($news->image_path) {
+            $name = pathinfo($news->image_path, PATHINFO_FILENAME);
+            $ext = pathinfo($news->image_path, PATHINFO_EXTENSION);
+            $path = public_path('/images') . '/' . $name . '.' . $ext;
+    
+            if(file_exists($path)) 
+            {
+                unlink($path);
+            }
+        }
+        $news->delete();
+        return redirect()->route('news-index')->with('deleted', 'Mechanics information successfully deleted.');
     }
 }
