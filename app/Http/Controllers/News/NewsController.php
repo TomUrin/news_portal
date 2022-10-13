@@ -69,7 +69,7 @@ class NewsController extends \App\Http\Controllers\Controller
         $news->title = $request->title;
         $news->content = $request->content;
         $news->save();
-        return redirect()->route('news-index')->with('success', 'Mechanics information successfully added');
+        return redirect()->route('news-index')->with('success', 'Naujiena sėkmingai pridėta');
     }
 
     /**
@@ -131,7 +131,7 @@ class NewsController extends \App\Http\Controllers\Controller
         $news->category_id = $request->newCategory;
         
         $news->save();
-        return redirect()->route('news-index')->with('infoUpdate', 'Mechanics information have been successfully updated.');
+        return redirect()->route('news-index')->with('infoUpdate', 'Naujienos informacija sėkmingai paredaguota');
     }
 
     /**

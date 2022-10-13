@@ -37,22 +37,22 @@
                         </div>
                     </div>
                     <div class="row justify-content-center">
-                    <section class="comment-list mb-5 col-8">
-                        <h2 class="section-title mb-5 text-center" data-aos="fade-up">Visi komentarai ({{ $news->comments->count() }})</h2>
-                        @foreach($news->comments as $comment)
-                        <div class="comment-text mb-4">
-                            <span class="username">
-                            <div>
-                                {{ $comment->userInfo->email }}
+                        <section class="comment-list mb-5 col-8">
+                            <h2 class="section-title mb-5 text-center" data-aos="fade-up">Visi komentarai ({{
+                                $news->comments->count() }})</h2>
+                            @foreach($news->comments as $comment)
+                            <div class="comment-text mb-4">
+                                <span class="username">
+                                    <div>
+                                        {{ $comment->userInfo->email }}
+                                    </div>
+                                    <span class="text-muted float-end">{{ $comment->dateAsCarbon->diffForHumans() }}</span>
+                                </span>
+                                {{ $comment->comment }}
                             </div>
-                            
-                            <span class="text-muted float-end">{{ $comment->dateAsCarbon->diffForHumans() }}</span>
-                        </span>
-                        {{ $comment->comment }}
-                        </div>
-                        @endforeach
-                    </section>
-                </div>
+                            @endforeach
+                        </section>
+                    </div>
                     <section class="comment-section">
                         <h2 class="section-title mb-5 text-center" data-aos="fade-up">Pridėti komentarą</h2>
                         <form action=" {{ route('news-comments-store', $news->id) }} " method="post" class="mb-0">
@@ -68,7 +68,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-md-2">
                                     <div class="d-grid gap-4" data-aos="fade-up">
-                                        <input type="submit" value="Comment" class="btn btn-warning">
+                                        <input type="submit" value="Komentuoti" class="btn btn-warning">
                                     </div>
                                 </div>
                             </div>

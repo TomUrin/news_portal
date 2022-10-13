@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category as C;
 use App\Models\Comment as Com;
+use Carbon\Carbon;
 
 class News extends Model
 {
@@ -19,5 +20,10 @@ class News extends Model
     public function comments()
     {
         return $this->hasMany(Com::class, 'news_id', 'id');
+    }
+
+    public function getDateAsCarbonAttribute()
+    {
+        return Carbon::parse($this->updated_at);
     }
 }
