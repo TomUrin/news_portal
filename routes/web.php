@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\NewsController as N;
+use App\Http\Controllers\News\NewsController as N;
+use App\Http\Controllers\News\Comments\CommentController as C;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,18 +20,26 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Restaurants
+
+// News
 
 Route::prefix('news')->name('news-')->group(function () {
     Route::get('', [N::class, 'index'])->name('index');
-    Route::get('showAll', [N::class, 'showAll'])->name('showAll');
     Route::get('create', [N::class, 'create'])->name('create');
     Route::post('', [N::class, 'store'])->name('store');
     Route::get('edit/{news}', [N::class, 'edit'])->name('edit');
     Route::put('{news}', [N::class, 'update'])->name('update');
     Route::delete('{news}', [N::class, 'destroy'])->name('delete');
-    Route::get('show/{id}', [N::class, 'show'])->name('show');    
+    Route::get('show/{id}', [N::class, 'show'])->name('show');  
+
+    Route::prefix('show/{id}/comments')->name('comments-')->group(function () {
+        Route::post('', [C::class, 'store'])->name('store');
+    });
 });
+
+// Comments
+
+
 
 Auth::routes();
 

@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\News;
 
 use App\Models\News;
 use App\Models\Category;
-use App\Models\Comment;
 use Illuminate\Http\Request;
 use Validator;
 
-class NewsController extends Controller
+class NewsController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
@@ -69,7 +68,6 @@ class NewsController extends Controller
         $news->category_id = $request->category_id;
         $news->title = $request->title;
         $news->content = $request->content;
-
         $news->save();
         return redirect()->route('news-index')->with('success', 'Mechanics information successfully added');
     }
@@ -80,9 +78,12 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function show(News $news)
+    public function show(int $newsId)
     {
-        //
+        $news = News::where('id', $newsId)->first();
+        $categories = Category::all();
+
+        return view('news.show', ['news' => $news, 'categories' => $categories,]);
     }
 
     /**

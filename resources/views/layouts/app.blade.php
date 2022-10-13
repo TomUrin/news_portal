@@ -52,7 +52,7 @@
                         </li>
                         @endif
                         @else
-                @if (Auth::user()->role > 9) <li class="nav-item dropdown">
+                 <li class="nav-item dropdown">
                     <a id="navbarDropdown1" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         Naujienos
                     </a>
@@ -61,14 +61,9 @@
                         <a class="dropdown-item" href="{{ route('news-index') }}">
                             Naujienų sąrašas
                         </a>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown1">
-                        <a class="dropdown-item" href="{{ route('news-showAll') }}">
-                            Visos naujienos
-                        </a>
-                    </div>
+                    </div>  
                     </li>
-                    @endif
+                   
                     
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

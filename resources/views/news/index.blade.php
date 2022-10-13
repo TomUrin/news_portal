@@ -21,14 +21,17 @@
                         <thead>
                             <tr>
                                 <th scope="col">Antraštė</th>
+                                <th scope="col">Data</th>
                                 <th scope="col">Veiksmai</th>
                         </thead>
                         @foreach($news as $new)
                         <tbody>
                             <tr> 
                             <td scope="row"> {{$new->title}} </td>
-                                @if (Auth::user()->role > 9)
+                            <td scope="row"> {{$new->updated_at}} </td>
                                 <td scope="row" class="actions">
+                                    <a class="btn btn-outline-info btn-sm me-2 " href="{{route('news-show', $new->id)}}">RODYTI</a>
+                                    @if (Auth::user()->role > 9)
                                     <a class="btn btn-outline-warning btn-sm me-2 " href="{{route('news-edit', $new)}}">REDAGUOTI</a>
                                     <form method="POST" action="{{route('news-delete', $new)}}">
                                         <button class="btn btn-outline-danger btn-sm mt-2" type="submit">TRINTI</button>
